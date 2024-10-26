@@ -1,4 +1,4 @@
-package programmers.codingTest;
+package programmers.codingTest.aivleschool.entrance;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class AlienSpeciesTypes_ambiguousSolution {
+public class AlienSpeciesTypes_ambiguousSolutionVer2 {
 
     public int[] solution(int n, int m) {
         int answer[] = new int[2];
@@ -17,11 +17,14 @@ public class AlienSpeciesTypes_ambiguousSolution {
         int maxSpecies = Integer.MIN_VALUE;
         int minSpecies = Integer.MAX_VALUE;
         int species = 0;
+        int fight = 0;
         int firstFight = 0;
         int secondFight = 0;
-        int fight = 0;
+        int alien = 0;
         int spicesCount = 0;
         int count = 0;
+        boolean continueTrue = false;
+        boolean jPlusTrue = false;
 
         // index0에는 몇번째 경우의 수인지, 1에는 몇개의 종류인지
         int[] nCase = new int[2];
@@ -47,9 +50,12 @@ public class AlienSpeciesTypes_ambiguousSolution {
             int remainAlien = n;
 
             firstFight = getInFight(i);
+            spicesCount++;
 
             // while문으로 고치는거 생각해보기
-            for (int j = i; j >= 0; j--) {
+            for (int j = i; j > 0; j--) {
+
+                // 6 3 하고 남은 외계인이 2명이다. : 4마리 다시 더해줬어야
 
                 // TODO 필요 코드인지 확인하고 삭제
                 if (remainAlien <= 0) {
@@ -62,24 +68,66 @@ public class AlienSpeciesTypes_ambiguousSolution {
                 }
 
                 secondFight = getInFight(j);
+                spicesCount++;
 
-                fight = firstFight + secondFight;
+                if (continueTrue) {
+                    spicesCount--;
+                }
+
+                // 6 3 3 으로 올라올때는 여기서 이걸 해줘야되고
+                // 차이가 뭘까?
+                if (!jPlusTrue) {
+                    // fight + secondFight가 되도록 바꿔야겠음
+                    // 보통은 이거
+                    fight = firstFight + secondFight;
+                } else {
+                    fight = fight + secondFight;
+                }
+//                count가 2
+
+                // species로 하려고 하니 무한반복
+//                if (species == 0) {
+//                    fight += secondFight;
+//                }
 
                 if (fight > m) {
+                    continueTrue = true;
                     continue;
                 }
 
+//                spicesCount++;
                 remainFight = m - fight;
 
                 if (j == 1) {
                     j = 0;
+                    spicesCount--;
+                } else {
+                    spicesCount++;
                 }
 
-                remainAlien = n - (i + j);
+                // 여기에서 j를 한번 더 해줘야
 
+                if (!jPlusTrue) {
+                    alien = i + j;
+                    remainAlien = n - (i + j);
+                } else {
+                    alien = i + j + j;
+                    remainAlien = n - (i + j + j);
+                }
+
+                // 여기서 위로 올라갈 때 다시 j가 3이 되도록 해야 함
+                if (remainFight != 0) {
+                    jPlusTrue = true;
+                    j++;
+                    // 0818 1201 TODO 여기서 뭔가 해줘야 할것같음
+                }
+                // TODO 0818 1220 2,4 까지는 잘 되는데 무한루프 돌게 됨
+                // 6 4 1 1 -> 4 갔다가 6 3 3 갈 때 spicesCount가 6(1)인 상태에서 다시 진행되야 되는데 2인 상태에서 +가 된다
+//                spicesCount++;
                 if (remainFight == 0) {
-                    spicesCount++;
-
+                    if (alien > n) {
+                        break;
+                    }
                     species = spicesCount + remainAlien;
 
                     beforeNumberOfCase = nCase[0];
@@ -96,13 +144,18 @@ public class AlienSpeciesTypes_ambiguousSolution {
                     maxSpecies = Math.max(maxSpecies, species);
 
                     // TODO 꼭 필요한 코드인지 모르겠다
-//                    remainAlien = n;
-//                    remainFight = m;
+
+                    // 0었는데 다시 6만들어 줘야 함
+                    remainFight = m - firstFight;
+                    // 2되었는데 다시 6만들어줘야 함 12 - 6 = 6
+                    remainAlien = n - i;
 
 //                    TODO 이렇게 하는게 나을거 같은데 : 뭐가 낫다는거지...? : species위에서 if문으로 보지 말고 여기서
 //                    species = 0;
-                    fight = 0;
-
+                    // fight도 15로 만들어 줘야 함, 그리고 올라가서 어떻게 되는지 보기
+                    fight -= secondFight;
+                    spicesCount--;
+                    alien = n - j;
                 }
             }
         }
@@ -131,7 +184,7 @@ public class AlienSpeciesTypes_ambiguousSolution {
     }
 
     public static void main(String[] args) throws IOException {
-        AlienSpeciesTypes_ambiguousSolution main = new AlienSpeciesTypes_ambiguousSolution();
+        AlienSpeciesTypes_ambiguousSolutionVer2 main = new AlienSpeciesTypes_ambiguousSolutionVer2();
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bf = new BufferedWriter(new OutputStreamWriter(System.out));
         int n = Integer.parseInt(br.readLine());

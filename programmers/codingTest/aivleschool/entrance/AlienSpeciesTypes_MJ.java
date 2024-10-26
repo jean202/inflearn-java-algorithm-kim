@@ -1,4 +1,4 @@
-package programmers.codingTest;
+package programmers.codingTest.aivleschool.entrance;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package programmers.codingTest;
+package programmers.codingTest.aivleschool.entrance;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
