@@ -36,6 +36,7 @@ public class DominoBlockInstability {
         return result;
     }
 
+    // {{2, 3}, {3, 4}, {1, 5}}, {}, {}
     private void backtrack(List<List<Integer>> result, List<Integer> temp, int n, int m, int start) {
         if (temp.size() == m) {
             result.add(new ArrayList<>(temp));

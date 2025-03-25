@@ -18,10 +18,14 @@ public class DominoBlockInstabilityPrepare {
 
         @SuppressWarnings("unchecked")
         List<Integer>[] collapsible = (List<Integer>[]) new ArrayList[n];
+        // 0 1 2
+        // [ {2}, {3,4}, {4, 5, 6}, {}    ]
 
         for (int i = 0; i < n; i++) {
             collapsible[i] = new ArrayList<>();
             domino = position[i] + height[i];
+            // i 0 j 1
+            // i 1 j 2 3 4 5 6
             for (int j = i + 1; j < n; j++) {
                 if (position[j] <= domino) {
                     collapsible[i].add(j);
