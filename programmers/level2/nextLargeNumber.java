@@ -112,16 +112,16 @@ public class nextLargeNumber {
 
     public int bTod(String answerString) {
         int answer = 0;
-    for (int i = 0; i < answerString.length(); i++) {
-        if (answerString.charAt(i) == '1') {
-            if (i == (answerString.length() - 1)) {
-                answer += 1;
-                break;
+        for (int i = 0; i < answerString.length(); i++) {
+            if (answerString.charAt(i) == '1') {
+                if (i == (answerString.length() - 1)) {
+                    answer += 1;
+                    break;
+                }
+                answer += Math.pow(2, answerString.length() - i - 1);
             }
-            answer += Math.pow(2, answerString.length() - i - 1);
         }
-    }
-    return answer;
+        return answer;
     }
 
     // 여기서부터 제대로 된 답
@@ -135,7 +135,7 @@ public class nextLargeNumber {
     }
 
     // 오른쪽에서 연속된 1의 뭉치 바로 앞의 0을 1로, 그 뒤를 0으로 바꾸고, 연속된 1들을 맨 뒤로 보내기
-    public int pSolutionG(int n) {
+    public int gSolutionG(int n) {
         int c = n;
         int c0 = 0; // 0의 개수
         int c1 = 0; // 1의 개수
@@ -158,6 +158,12 @@ public class nextLargeNumber {
         n &= ~((1 << c0) - 1); // 그 오른쪽(작은 자리)은 모두 0
         n |= (1 << (c1 - 1)) - 1; // 끝에 1뭉치(2개) 붙이기
         return n;
+    }
+
+    public int pSolution(int n) {
+        int postPattern = n & -n;
+        int smallPattern = ((n ^ (n + postPattern)) / postPattern) >> 2;
+        return n + postPattern | smallPattern;
     }
 
     public static void main(String[] args) {
